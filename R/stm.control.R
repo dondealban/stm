@@ -160,6 +160,7 @@ stm.control <- function(documents, vocab, settings, model=NULL) {
     if(!stopits & verbose) report(convergence, ntokens=ntokens, beta, vocab, 
                                        settings$topicreportevery, verbose)
   }
+  recover()
   #######
   #Step 3: Construct Output
   #######
