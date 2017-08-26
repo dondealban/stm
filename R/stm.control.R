@@ -176,19 +176,7 @@ stm.control <- function(documents, vocab, settings, model=NULL) {
                 vocab=vocab, convergence=convergence, 
                 invsigma=solve(sigma), time=time, version=utils::packageDescription("stm")$Version)
   cat("Post model \n")
-  
-  cat("About to type cast \n")
-  lambda <- as.matrix(lambda)
-  cat("About to exp \n")
-  elambda <- exp(lambda)
-  cat("About to row sum lambda \n")
-  norm <- rowSums(elambda)
-  cat("About to log the rowsums \n")
-  norm <- log(norm)
-  cat("remove elambda to clear memory \n")
-  rm(elambda)
-  cat("post normalization \n")
-  model$theta <- exp(lambda - norm)
+  model$theta <- exp(lambda - log(rowSums(exp(lambda))))
   cat("Post theta \n")
   model$eta <- lambda[,-ncol(lambda), drop=FALSE]
   cat("Post eta \n")
