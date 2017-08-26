@@ -160,7 +160,6 @@ stm.control <- function(documents, vocab, settings, model=NULL) {
     if(!stopits & verbose) report(convergence, ntokens=ntokens, beta, vocab, 
                                        settings$topicreportevery, verbose)
   }
-  recover()
   #######
   #Step 3: Construct Output
   #######
@@ -172,11 +171,15 @@ stm.control <- function(documents, vocab, settings, model=NULL) {
   }
   beta$beta <- NULL
   lambda <- cbind(lambda,0)
+  cat("Pre list \n")
   model <- list(mu=mu, sigma=sigma, beta=beta, settings=settings,
                 vocab=vocab, convergence=convergence, 
-                theta=exp(lambda - row.lse(lambda)), 
-                eta=lambda[,-ncol(lambda), drop=FALSE],
                 invsigma=solve(sigma), time=time, version=utils::packageDescription("stm")$Version)
+  cat("Post model \n")
+  model$theta <- exp(lambda - row.lse(lambda))
+  cat("Post theta \n")
+  model$eta <- lambda[,-ncol(lambda), drop=FALSE]
+  cat("Post eta \n")
   class(model) <- "STM"  
   return(model)
 }
