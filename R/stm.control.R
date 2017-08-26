@@ -176,7 +176,11 @@ stm.control <- function(documents, vocab, settings, model=NULL) {
                 vocab=vocab, convergence=convergence, 
                 invsigma=solve(sigma), time=time, version=utils::packageDescription("stm")$Version)
   cat("Post model \n")
-  model$theta <- exp(lambda - row.lse(lambda))
+  manual <- apply(lambda, 1, function(x) log(sum(exp(x))))
+  cat("Post manual lse norm")
+  norm <- row.lse(lambda)
+  cat("post normalization \n")
+  model$theta <- exp(lambda - norm)
   cat("Post theta \n")
   model$eta <- lambda[,-ncol(lambda), drop=FALSE]
   cat("Post eta \n")
